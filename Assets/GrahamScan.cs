@@ -194,13 +194,18 @@ public class GrahamScan : MonoBehaviour
             new Vector2(11.5f,-4)
         };
 
-        foreach (Vector2 pointPair in hullValuesFixed)
+        triggerGrahamScan(hullValuesFixed);
+      
+    }
+    public void triggerGrahamScan(List<Vector2> points)
+    {
+        foreach (Vector2 pointPair in points)
         {
             Vector3 pos = new Vector3(pointPair.x, 1, pointPair.y);
             go = Instantiate(pointPrefab, pos, pointPrefab.transform.rotation, this.transform) as GameObject;
             pointsList.Add(go);
         }
-        convexHull(hullValuesFixed);
+        convexHull(points);
         for (int i = 0; i < hullPoints.Count; i++)
         {
             if (i == hullPoints.Count - 1)
