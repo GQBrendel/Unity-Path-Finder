@@ -6,6 +6,8 @@ public class StateManager : MonoBehaviour {
 
     public GrahamScan grahanScan;
     public GameObject pointPrefab;
+    public float offset = 2f;
+    public Transform instancePos;
     GameObject go;
     void Start () {
 		
@@ -13,11 +15,17 @@ public class StateManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetMouseButtonDown(0))
+
+        RaycastHit hit;
+        if(Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
         {
-            Vector3 spawnPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            spawnPosition.y = 1.0f;
-            GameObject objectInstance = Instantiate(pointPrefab, spawnPosition, Quaternion.Euler(new Vector3(0, 0, 0)));
+            instancePos.position = hit.point + hit.normal * offset;
+            if(Input.GetMouseButtonDown(0))
+            {
+                Instantiate(pointPrefab, instancePos.position, Quaternion.identity);
+            }
         }
+
     }
+
 }
