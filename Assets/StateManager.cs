@@ -8,12 +8,12 @@ public class StateManager : MonoBehaviour {
     public GameObject pointPrefab;
     public float offset = 2f;
     public Transform instancePos;
+    public List<Vector2> selectedPoints;
+    public List<GameObject> pinList;
     GameObject go;
     void Start () {
 		
 	}
-	
-	// Update is called once per frame
 	void Update () {
 
         RaycastHit hit;
@@ -22,10 +22,16 @@ public class StateManager : MonoBehaviour {
             instancePos.position = hit.point + hit.normal * offset;
             if(Input.GetMouseButtonDown(0))
             {
-                Instantiate(pointPrefab, instancePos.position, Quaternion.identity);
+                go = Instantiate(pointPrefab, instancePos.position, Quaternion.identity) as GameObject;
+                selectedPoints.Add(new Vector2(instancePos.position.x, instancePos.position.z));
+                pinList.Add(go);
             }
         }
 
+    }
+    public void startGrahanScan()
+    {
+        grahanScan.triggerGrahamScan(selectedPoints, pinList);
     }
 
 }

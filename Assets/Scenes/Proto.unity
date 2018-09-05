@@ -145,7 +145,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: b762cbe1fcb17824288e96a8f5a2a129, type: 2}
+  - {fileID: 2100000, guid: c50e244337c7af948b48e7f569bb15bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -344,7 +344,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 1
+  orthographic: 0
   orthographic size: 13.81
   m_Depth: -1
   m_CullingMask:
@@ -367,8 +367,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 875080570}
-  m_LocalRotation: {x: 0, y: 0.74547607, z: -0.6665324, w: 0}
-  m_LocalPosition: {x: -3.1, y: 103.73, z: 12.1}
+  m_LocalRotation: {x: 0.00076319056, y: 0.9052189, z: -0.42494178, w: 0.0016258846}
+  m_LocalPosition: {x: -0.94189334, y: 44.803665, z: 58.14148}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -450,8 +450,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1910829613}
-        m_MethodName: bibi
+      - m_Target: {fileID: 1333900209}
+        m_MethodName: startGrahanScan
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -526,6 +526,9 @@ MonoBehaviour:
   grahanScan: {fileID: 1910829613}
   pointPrefab: {fileID: 1614234621421828, guid: a6e4bebab3501fa4fb40387698016d2c,
     type: 2}
+  offset: 0
+  instancePos: {fileID: 1333900210}
+  selectedPoints: []
 --- !u!4 &1333900210
 Transform:
   m_ObjectHideFlags: 0

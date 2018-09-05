@@ -138,6 +138,7 @@ public class GrahamScan : MonoBehaviour
             keepLeft(result, value);
         }
         Debug.Log("# Convex Hull #");
+        hullPoints.Clear();
         foreach (Vector2 value in result)
         {
             Debug.Log("(" + value.x + "," + value.y + ") ");
@@ -146,6 +147,11 @@ public class GrahamScan : MonoBehaviour
                 if (go.transform.position.x == value.x && go.transform.position.z == value.y)
                 {
                     hullPoints.Add(go.transform);
+                }
+                else
+                {
+                    go.GetComponent<LineRenderer>().SetPosition(0, go.transform.position);
+                    go.GetComponent<LineRenderer>().SetPosition(1, go.transform.position);
                 }
             }
         }
@@ -194,16 +200,23 @@ public class GrahamScan : MonoBehaviour
             new Vector2(11.5f,-4)
         };
 
-        triggerGrahamScan(hullValuesFixed);
+        triggerGrahamScan(hullValuesFixed, null);
       
     }
-    public void triggerGrahamScan(List<Vector2> points)
+    public void triggerGrahamScan(List<Vector2> points, List<GameObject> spawnedPins)
     {
-        foreach (Vector2 pointPair in points)
+        if(spawnedPins != null)
         {
-            Vector3 pos = new Vector3(pointPair.x, 1, pointPair.y);
-            go = Instantiate(pointPrefab, pos, pointPrefab.transform.rotation, this.transform) as GameObject;
-            pointsList.Add(go);
+            pointsList = spawnedPins;
+        }
+        else
+        {
+            foreach (Vector2 pointPair in points)
+            {
+                Vector3 pos = new Vector3(pointPair.x, 1, pointPair.y);
+                go = Instantiate(pointPrefab, pos, pointPrefab.transform.rotation, this.transform) as GameObject;
+                pointsList.Add(go);
+            }
         }
         convexHull(points);
         for (int i = 0; i < hullPoints.Count; i++)
@@ -225,7 +238,7 @@ public class GrahamScan : MonoBehaviour
     {
         LineRenderer laser;
         laser = start.GetComponent<LineRenderer>();
-
+       
         Vector3 startPos, endPos;
         startPos = start.position;
         endPos = end.position;
