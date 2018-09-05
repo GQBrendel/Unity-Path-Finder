@@ -9,9 +9,6 @@ using System.Linq;
 public class QuickHull : MonoBehaviour
 {
     public bool useRandomPoints;
-    
-
-
    
     public GameObject pointPrefab;
     GameObject go;

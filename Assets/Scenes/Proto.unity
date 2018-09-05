@@ -271,6 +271,7 @@ GameObject:
   - component: {fileID: 1910829610}
   - component: {fileID: 1910829609}
   - component: {fileID: 1910829613}
+  - component: {fileID: 1910829614}
   m_Layer: 0
   m_Name: PointStarter
   m_TagString: Untagged
@@ -351,6 +352,20 @@ MonoBehaviour:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1910829608}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6997cb2f44e6345b58a0250bf7e05c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointPrefab: {fileID: 1070782955479946, guid: b1951dd5ff6127044bfafa17a19654eb,
+    type: 2}
+  hullPoints: []
+--- !u!114 &1910829614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1910829608}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 669cbc3421e2c874d8f313762f7a812d, type: 3}
   m_Name: 
