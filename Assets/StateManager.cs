@@ -5,6 +5,7 @@ using UnityEngine;
 public class StateManager : MonoBehaviour {
 
     public GrahamScan grahanScan;
+    public Graph graph;
     public GameObject pointPrefab;
     public float offset = 2f;
     public Transform instancePos;
@@ -32,6 +33,10 @@ public class StateManager : MonoBehaviour {
     public void startGrahanScan()
     {
         grahanScan.triggerGrahamScan(selectedPoints, pinList);
+    }
+    public void createFork()
+    {
+        graph.buildGraph(selectedPoints, pinList);
     }
 
 }

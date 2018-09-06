@@ -150,8 +150,11 @@ public class GrahamScan : MonoBehaviour
                 }
                 else
                 {
-                    go.GetComponent<LineRenderer>().SetPosition(0, go.transform.position);
-                    go.GetComponent<LineRenderer>().SetPosition(1, go.transform.position);
+                    LineRenderer lr = go.GetComponent<LineRenderer>();
+                    for(int i =0; i < lr.positionCount; i ++)
+                    {
+                        lr.SetPosition(i, go.transform.position);
+                    }
                 }
             }
         }
