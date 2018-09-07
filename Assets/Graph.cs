@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,6 +27,7 @@ public class Graph : MonoBehaviour
             else
             {
                 drawLaser(pinList[i].transform, pinList[i + 1].transform, pinList[i + 2].transform);
+
             }
 
         }
@@ -39,5 +41,20 @@ public class Graph : MonoBehaviour
         laser.SetPosition(0, start.position);
         laser.SetPosition(1, end.position);
         laser.SetPosition(2, middle.position);
+    }
+    private float euclidianDistance(Vector2 p1, Vector2 p2)
+    {
+
+        float x0 = p1.x;
+        float y0 = p1.y;
+
+        float x1 = p2.x;
+        float y1 = p2.y;
+
+        float dX = x1 - x0;
+        float dY = y1 - y0;
+        double distance = Math.Sqrt(dX * dX + dY * dY);
+
+        return (float)distance;
     }
 }
