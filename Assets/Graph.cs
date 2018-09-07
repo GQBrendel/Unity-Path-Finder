@@ -9,54 +9,64 @@ public class Graph : MonoBehaviour
     public List<GameObject> pinList;
     public List<Vector2> selectedPoints;
     public GameObject distanceInfoPrefab;
+    public List<GameObject> distInfoList;
 
+    public void clearInfo()
+    {
+        foreach (GameObject go in distInfoList)
+        {
+            Destroy(go);
+        }
+        distInfoList.Clear();
+    }
     public void buildGraph(List<Vector2> _selectedPoints, List<GameObject> _pinList)
     {
         selectedPoints = _selectedPoints;
         pinList = _pinList.OrderBy(go => Mathf.Atan2(go.transform.position.x, go.transform.position.z)).ToList();
+        clearInfo();
 
         for (int i = 0; i < pinList.Count; i++)
         {
-
-            Transform t1 = pinList[i].transform;
             if (i == pinList.Count - 1 || i == pinList.Count - 2)
             {
-                Vector3 middlePoint1 = ((t1.position - pinList[0].transform.position) * 0.5f) + pinList[0].transform.position;
-
-                Instantiate(distanceInfoPrefab, middlePoint1, distanceInfoPrefab.transform.rotation, this.transform);
-                drawLaser(t1, pinList[0].transform, pinList[0].transform);
-            }
-            else if (i == pinList.Count - 2)
-            {
-                //drawLaser(_pinList[i].transform, _pinList[0].transform);
             }
             else
             {
-
+                Transform t1 = pinList[i].transform;
                 Transform t2 = pinList[i + 1].transform;
                 Transform t3 = pinList[i + 2].transform;
-
-                drawLaser(t1, t2, t2);
-                Vector3 middlePoint1 = ((t1.position - t2.position) * 0.5f) + t2.position;
-                Vector3 middlePoint2 = ((t3.position - t2.position) * 0.5f) + t2.position;
-
-                Instantiate(distanceInfoPrefab,middlePoint1,distanceInfoPrefab.transform.rotation,this.transform);
-               // Instantiate(distanceInfoPrefab, middlePoint2, distanceInfoPrefab.transform.rotation, this.transform);
-
+                drawLaser(t1, t2);
+                drawLaserChild(t1, t3);
             }
 
         }
     }
-    private void drawLaser(Transform start, Transform middle, Transform end)
+    private void instantiateCounter(Transform start, Transform end)
+    {
+        Vector3 middlePoint1 = ((start.position - end.position) * 0.5f) + end.position;
+        GameObject go =
+        Instantiate(distanceInfoPrefab, middlePoint1, distanceInfoPrefab.transform.rotation, this.transform);
+        distInfoList.Add(go);
+    }
+    private void drawLaserChild(Transform start, Transform end)
+    {
+        LineRenderer laser;
+        laser = start.Find("Pin").GetComponent<LineRenderer>();
+
+        laser.SetPosition(0, start.position);
+        laser.SetPosition(1, end.position);
+        instantiateCounter(start, end);
+
+    }
+    private void drawLaser(Transform start, Transform end)
     {
         LineRenderer laser;
         laser = start.GetComponent<LineRenderer>();
-
-//        laser.positionCount = 3;
-        laser.positionCount = 2;
+        
         laser.SetPosition(0, start.position);
         laser.SetPosition(1, end.position);
-  //      laser.SetPosition(2, middle.position);
+
+        instantiateCounter(start, end);
     }
     private float euclidianDistance(Vector2 p1, Vector2 p2)
     {

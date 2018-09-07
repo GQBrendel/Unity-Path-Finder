@@ -32,6 +32,7 @@ public class StateManager : MonoBehaviour {
     }
     public void startGrahanScan()
     {
+        graph.clearInfo();
         grahanScan.triggerGrahamScan(selectedPoints, pinList);
     }
     public void createFork()

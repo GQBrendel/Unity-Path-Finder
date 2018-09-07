@@ -151,9 +151,11 @@ public class GrahamScan : MonoBehaviour
                 else
                 {
                     LineRenderer lr = go.GetComponent<LineRenderer>();
+                    LineRenderer lrC = go.transform.Find("Pin").GetComponent<LineRenderer>();
                     for(int i =0; i < lr.positionCount; i ++)
                     {
                         lr.SetPosition(i, go.transform.position);
+                        lrC.SetPosition(i, go.transform.position);
                     }
                 }
             }
