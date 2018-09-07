@@ -8,6 +8,7 @@ public class Graph : MonoBehaviour
 {
     public List<GameObject> pinList;
     public List<Vector2> selectedPoints;
+    public GameObject distanceInfoPrefab;
 
     public void buildGraph(List<Vector2> _selectedPoints, List<GameObject> _pinList)
     {
@@ -16,9 +17,14 @@ public class Graph : MonoBehaviour
 
         for (int i = 0; i < pinList.Count; i++)
         {
-            if (i == pinList.Count - 1)
+
+            Transform t1 = pinList[i].transform;
+            if (i == pinList.Count - 1 || i == pinList.Count - 2)
             {
-                //drawLaser(_pinList[i].transform, _pinList[0].transform);
+                Vector3 middlePoint1 = ((t1.position - pinList[0].transform.position) * 0.5f) + pinList[0].transform.position;
+
+                Instantiate(distanceInfoPrefab, middlePoint1, distanceInfoPrefab.transform.rotation, this.transform);
+                drawLaser(t1, pinList[0].transform, pinList[0].transform);
             }
             else if (i == pinList.Count - 2)
             {
@@ -26,7 +32,16 @@ public class Graph : MonoBehaviour
             }
             else
             {
-                drawLaser(pinList[i].transform, pinList[i + 1].transform, pinList[i + 2].transform);
+
+                Transform t2 = pinList[i + 1].transform;
+                Transform t3 = pinList[i + 2].transform;
+
+                drawLaser(t1, t2, t2);
+                Vector3 middlePoint1 = ((t1.position - t2.position) * 0.5f) + t2.position;
+                Vector3 middlePoint2 = ((t3.position - t2.position) * 0.5f) + t2.position;
+
+                Instantiate(distanceInfoPrefab,middlePoint1,distanceInfoPrefab.transform.rotation,this.transform);
+               // Instantiate(distanceInfoPrefab, middlePoint2, distanceInfoPrefab.transform.rotation, this.transform);
 
             }
 
@@ -37,10 +52,11 @@ public class Graph : MonoBehaviour
         LineRenderer laser;
         laser = start.GetComponent<LineRenderer>();
 
-        laser.positionCount = 3;
+//        laser.positionCount = 3;
+        laser.positionCount = 2;
         laser.SetPosition(0, start.position);
         laser.SetPosition(1, end.position);
-        laser.SetPosition(2, middle.position);
+  //      laser.SetPosition(2, middle.position);
     }
     private float euclidianDistance(Vector2 p1, Vector2 p2)
     {
