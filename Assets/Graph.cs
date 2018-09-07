@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+using UnityEngine.UI;
+
 public class Graph : MonoBehaviour
 {
     public List<GameObject> pinList;
@@ -27,10 +29,7 @@ public class Graph : MonoBehaviour
 
         for (int i = 0; i < pinList.Count; i++)
         {
-            if (i == pinList.Count - 1 || i == pinList.Count - 2)
-            {
-            }
-            else
+            if (i != pinList.Count - 1 && i != pinList.Count - 2)
             {
                 Transform t1 = pinList[i].transform;
                 Transform t2 = pinList[i + 1].transform;
@@ -38,7 +37,6 @@ public class Graph : MonoBehaviour
                 drawLaser(t1, t2);
                 drawLaserChild(t1, t3);
             }
-
         }
     }
     private void instantiateCounter(Transform start, Transform end)
@@ -47,6 +45,8 @@ public class Graph : MonoBehaviour
         GameObject go =
         Instantiate(distanceInfoPrefab, middlePoint1, distanceInfoPrefab.transform.rotation, this.transform);
         distInfoList.Add(go);
+        float dist = euclidianDistance(start.position, end.position);
+        go.GetComponentInChildren<Text>().text = dist.ToString("f2");
     }
     private void drawLaserChild(Transform start, Transform end)
     {
@@ -68,14 +68,14 @@ public class Graph : MonoBehaviour
 
         instantiateCounter(start, end);
     }
-    private float euclidianDistance(Vector2 p1, Vector2 p2)
+    private float euclidianDistance(Vector3 p1, Vector3 p2)
     {
 
         float x0 = p1.x;
-        float y0 = p1.y;
+        float y0 = p1.z;
 
         float x1 = p2.x;
-        float y1 = p2.y;
+        float y1 = p2.z;
 
         float dX = x1 - x0;
         float dY = y1 - y0;

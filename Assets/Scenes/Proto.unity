@@ -1084,3 +1084,4 @@ MonoBehaviour:
   selectedPoints: []
   distanceInfoPrefab: {fileID: 1777011401387040, guid: a64e434e151175b41a04c74248f9fa35,
     type: 2}
+  distInfoList: []
