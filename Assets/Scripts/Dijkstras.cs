@@ -10,13 +10,16 @@ using UnityEngine;
 
 public class Dijkstras : MonoBehaviour {
 
+    //This list keeps track of all the nodes in the scenes
     public List<Node> nodesList = new List<Node>();
 
-    void Start () {
-		
-	}
-	
-	public Path GetShortestPath(Node start, Node end)
+    /// <summary>
+    /// Returns the shortestef Path From two given nodes
+    /// </summary>
+    /// <param name="start">The first node of the path</param>
+    /// <param name="end">The last node of the path</param>
+    /// <returns></returns>
+    public Path GetShortestPath(Node start, Node end)
     {
 
         // The final path

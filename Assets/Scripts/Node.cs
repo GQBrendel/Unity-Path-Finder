@@ -2,6 +2,9 @@
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// A represantation of a node, it keep tracks of it's connected nodes.
+/// </summary>
 public class Node : MonoBehaviour {
 
     public List<Node> connections;

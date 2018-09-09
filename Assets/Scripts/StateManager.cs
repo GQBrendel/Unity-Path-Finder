@@ -1,8 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// A managemanet class to trigger the scipts and connects the objects in Unity.
+/// </summary>
 public class StateManager : MonoBehaviour {
 
     public GrahamScan grahanScan;
@@ -28,6 +30,7 @@ public class StateManager : MonoBehaviour {
 	void Update () {
 
         RaycastHit hit;
+        //Calculating shortest path is bool to control the current mode of the user
         if(calculatingShortestPath)
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
@@ -35,12 +38,12 @@ public class StateManager : MonoBehaviour {
                 if (Input.GetMouseButtonDown(0))
                 {
                     GameObject hitted = hit.transform.gameObject;
-                    if(hitted.tag == "Node")
+                    if(hitted.tag == "Node") //Selecting a pin (node) from the scene
                     {
                         Debug.Log("Selected " + hitted.name);
                         selectedNodes.Add(hitted.GetComponent<Node>());
                         hitted.GetComponent<Node>().turnBlue();
-                        if (selectedNodes.Count == 2)
+                        if (selectedNodes.Count == 2) //When you get two nodes start the dijkstras algorithm
                         {
                             startDijkstras();
                         }
@@ -48,7 +51,7 @@ public class StateManager : MonoBehaviour {
                 }
             }
         }
-        else
+        else //In this mode we spawn a node from every click of the user.
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {                
@@ -64,13 +67,12 @@ public class StateManager : MonoBehaviour {
                     if (pinNumber == 4)
                         options.GetComponent<GraphicRaycaster>().enabled = true;
                 }
-                if (Input.GetMouseButtonDown(1))
-                {
-                    djk.GetShortestPath(djk.nodesList[0], djk.nodesList[djk.nodesList.Count - 1]);
-                }
-            }
+             }
         }
     }
+    /// <summary>
+    /// Clear the current graph and start the grahan scan algorithm
+    /// </summary>
     public void startGrahanScan()
     {
         clearGraph();
@@ -86,11 +88,17 @@ public class StateManager : MonoBehaviour {
             n.GetComponent<Node>().turnRed();
         }
     }
+    /// <summary>
+    /// Connect all the nodes to create a graph
+    /// </summary>
     public void createGraph()
     {
         clearGraph();
         graph.buildGraph(selectedPoints, pinList);
     }
+    /// <summary>
+    /// Trigger the dijkstras algorithm from the two selected nodes.
+    /// </summary>
     void startDijkstras()
     {
         string output =
@@ -102,5 +110,4 @@ public class StateManager : MonoBehaviour {
     {
         calculatingShortestPath = !calculatingShortestPath;
     }
-
 }

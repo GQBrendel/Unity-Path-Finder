@@ -80,8 +80,6 @@ public class Path
 	/// <summary>
 	/// Returns a string that represents the current object.
 	/// </summary>
-	/// <returns>A string that represents the current object.</returns>
-	/// <filterpriority>2</filterpriority>
 	public override string ToString ()
 	{
         string s;
@@ -95,10 +93,9 @@ public class Path
         Debug.Log(s);
         return s;
     }
-
+    //Returns the euclidian distance beetween two points
     private float euclidianDistance(Vector3 p1, Vector3 p2)
     {
-
         float x0 = p1.x;
         float y0 = p1.z;
 
