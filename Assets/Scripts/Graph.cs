@@ -42,6 +42,7 @@ public class Graph : MonoBehaviour
     private void instantiateCounter(Transform start, Transform end)
     {
         Vector3 middlePoint1 = ((start.position - end.position) * 0.5f) + end.position;
+        middlePoint1 += new Vector3(0, 1, 0);
         GameObject go =
         Instantiate(distanceInfoPrefab, middlePoint1, distanceInfoPrefab.transform.rotation, this.transform);
         distInfoList.Add(go);
@@ -57,6 +58,10 @@ public class Graph : MonoBehaviour
         laser.SetPosition(1, end.position);
         instantiateCounter(start, end);
 
+
+        start.GetComponent<Node>().connections.Add(end.GetComponent<Node>());
+        end.GetComponent<Node>().connections.Add(start.GetComponent<Node>());
+
     }
     private void drawLaser(Transform start, Transform end)
     {
@@ -65,6 +70,9 @@ public class Graph : MonoBehaviour
         
         laser.SetPosition(0, start.position);
         laser.SetPosition(1, end.position);
+
+        start.GetComponent<Node>().connections.Add(end.GetComponent<Node>());
+        end.GetComponent<Node>().connections.Add(start.GetComponent<Node>());
 
         instantiateCounter(start, end);
     }
