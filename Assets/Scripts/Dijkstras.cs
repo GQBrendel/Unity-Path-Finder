@@ -22,12 +22,21 @@ public class Dijkstras : MonoBehaviour {
     public Path GetShortestPath(Node start, Node end)
     {
 
+        Debug.Log("The start and the end are the same because: ");
+        Debug.Log("Recebido start " + start);
+        Debug.Log("Recebido end " + end);
+
+
         // The final path
         Path path = new Path();
 
         // If the start and end are same node, we just return the start node, since the start and the end are the same
         if (start == end)
         {
+            Debug.Log("The start and the end are the same because: ");
+            Debug.Log("Recebido start " + start);
+            Debug.Log("Recebido end " + end);
+
             path.nodes.Add(start);
             return path;
         }

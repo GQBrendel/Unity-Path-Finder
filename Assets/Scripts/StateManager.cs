@@ -59,13 +59,17 @@ public class StateManager : MonoBehaviour {
                 instancePos.position = hit.point + hit.normal * offset;
                 if (Input.GetMouseButtonDown(0))
                 {
-                    go = Instantiate(pointPrefab, instancePos.position, Quaternion.identity) as GameObject;
-                    selectedPoints.Add(new Vector2(instancePos.position.x, instancePos.position.z));
-                    go.name = "pin" + pinNumber.ToString();
-                    go.GetComponent<Node>().uiName.text = "P" + pinNumber.ToString();
-                     pinNumber++;
-                    pinList.Add(go);
-                    djk.nodesList.Add(go.GetComponent<Node>());
+                    GameObject hitted = hit.transform.gameObject;
+                    if (hitted.tag == "Map") //
+                    {
+                        go = Instantiate(pointPrefab, instancePos.position, Quaternion.identity) as GameObject;
+                        selectedPoints.Add(new Vector2(instancePos.position.x, instancePos.position.z));
+                        go.name = "pin" + pinNumber.ToString();
+                        go.GetComponent<Node>().uiName.text = "P" + pinNumber.ToString();
+                        pinNumber++;
+                        pinList.Add(go);
+                        djk.nodesList.Add(go.GetComponent<Node>());
+                    }
                     if (pinNumber == 4)
                         options.GetComponent<GraphicRaycaster>().enabled = true;
                 }
@@ -133,6 +137,22 @@ public class StateManager : MonoBehaviour {
     /// <summary>
     /// Trigger the dijkstras algorithm from the two selected nodes.
     /// </summary>
+    /// 
+    public void autoPath(Node start, Node end)
+    {
+
+        Debug.Log("Recebido start " + start);
+        Debug.Log("Recebido end " + end);
+
+        //selectedNodes.Add(start);
+        // selectedNodes.Add(end);
+
+        string output =
+      djk.GetShortestPath(start, end).ToString();
+        pathText.text = output;
+      //  selectedNodes.Clear();
+
+    }
     void startDijkstras()
     {
         string output =
