@@ -62,6 +62,7 @@ public class StateManager : MonoBehaviour {
                     go = Instantiate(pointPrefab, instancePos.position, Quaternion.identity) as GameObject;
                     selectedPoints.Add(new Vector2(instancePos.position.x, instancePos.position.z));
                     go.name = "pin" + pinNumber.ToString();
+                    go.GetComponent<Node>().uiName.text = "P" + pinNumber.ToString();
                      pinNumber++;
                     pinList.Add(go);
                     djk.nodesList.Add(go.GetComponent<Node>());
@@ -82,6 +83,13 @@ public class StateManager : MonoBehaviour {
         grahanScan.triggerGrahamScan(selectedPoints, pinList);
         calculatingShortestPath = false;
     }
+    public void autoGrahanPath()
+    {
+        grahanScan.triggerGrahamScan(selectedPoints, pinList);
+        calculatingShortestPath = true;
+        graph.buildGraph(selectedPoints, pinList);
+    }
+
     public void clearGraph()
     {
         StartCoroutine(ClearForReal());
@@ -113,7 +121,6 @@ public class StateManager : MonoBehaviour {
             n.GetComponent<Node>().nodeRadius.radius = 0.5f;
             n.GetComponent<Node>().turnRed();
         }
-
     }
     /// <summary>
     /// Connect all the nodes to create a graph
@@ -135,15 +142,6 @@ public class StateManager : MonoBehaviour {
     }
     public void togglecalculatingShortestPath()
     {
-        if(calculatingShortestPath)
-        {
-            calculatingShortestPath = false;
-        }
-        else
-        {
-            calculatingShortestPath = true;
-        }
-
-        //calculatingShortestPath = !calculatingShortestPath;
+        calculatingShortestPath = !calculatingShortestPath;
     }
 }

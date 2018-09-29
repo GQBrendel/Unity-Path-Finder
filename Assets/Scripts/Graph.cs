@@ -42,10 +42,6 @@ public class Graph : MonoBehaviour
         }
         StartCoroutine(PerformConnections());
 
-        //
-   
-        //
-
     }
     IEnumerator PerformConnections()
     {
@@ -58,12 +54,19 @@ public class Graph : MonoBehaviour
             {
                 connectTwoNodes(pinList[i].transform, connectable.transform);
             }
-
         }
-
     }
     private void connectTwoNodes(Transform start, Transform end)
     {
+
+        if (start.GetComponent<Node>().areConnected(end.GetComponent<Node>()))
+        {
+            return;
+        }
+        if(true)
+        {
+
+        }
         LineRenderer laser;
 
         GameObject lineHolder = start.gameObject.GetComponent<Node>().instantiateConnection();
@@ -126,6 +129,66 @@ public class Graph : MonoBehaviour
         float dist = euclidianDistance(start.position, end.position);
         go.GetComponentInChildren<Text>().text = dist.ToString("f2");
     }
+
+
+    public void buildGraphForAutoPath(List<Transform> hullPoints)
+    {
+        //selectedPoints = _selectedPoints;
+        //Order list counterclockwise
+        //clearInfo();
+
+
+        // biggestLowestDistance();
+        // for (int i = 0; i < pinList.Count; i++)
+        // {
+        //      pinList[i].GetComponentInChildren<nodeConnection>().triggerConnections(distance);
+        //   }
+
+        for (int i = 0; i < hullPoints.Count; i++)
+        {
+            if(i == hullPoints.Count - 1)
+            {
+                try
+                {
+                    connectTwoNodes(hullPoints[0], hullPoints[i]);
+                }catch(Exception err)
+                {
+                    Debug.Log(err);
+                }
+            }
+            else
+            {
+                try
+                {
+                    connectTwoNodes(hullPoints[i], hullPoints[i + 1]);
+                }
+                catch (Exception err)
+                {
+                    Debug.Log(err);
+                }
+            }
+
+
+        }
+        //StartCoroutine(PerformConnectionsForAutoPath());
+
+    }/*
+    IEnumerator PerformConnectionsForAutoPath()
+    {
+        
+        yield return new WaitForSeconds(0.5f);
+        for (int i = 0; i < pinList.Count; i++)
+        {
+            List<GameObject> connectedList = pinList[i].GetComponentInChildren<nodeConnection>().nodesToConnect;
+
+            foreach (GameObject connectable in connectedList)
+            {
+                connectTwoNodes(pinList[i].transform, connectable.transform);
+            }
+        }
+}*/
+
+
     //Returns the euclidian distance beetween two points
     private float euclidianDistance(Vector3 p1, Vector3 p2)
     {

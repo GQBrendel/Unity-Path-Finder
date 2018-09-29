@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using TMPro;
 
 /// <summary>
 /// A represantation of a node, it keep tracks of it's connected nodes.
@@ -12,6 +13,7 @@ public class Node : MonoBehaviour {
     public GameObject connectionPrefab;
     public List<GameObject> lineChilds;
     public SphereCollider nodeRadius;
+    public TextMeshProUGUI uiName;
 
 	void Start () {
     }
@@ -47,5 +49,11 @@ public class Node : MonoBehaviour {
     void OnValidate()
     {
         connections = connections.Distinct().ToList();
+    }
+    public bool areConnected(Node compare)
+    {
+        bool alreadyExist = connections.Contains(compare);
+
+        return alreadyExist;
     }
 }
