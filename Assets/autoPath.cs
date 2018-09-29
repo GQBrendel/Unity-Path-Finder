@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using TMPro;
 
 public class autoPath : MonoBehaviour
 {
@@ -17,10 +18,39 @@ public class autoPath : MonoBehaviour
 
     public List<GameObject> pointsList = new List<GameObject>();
 
+    int currentPointPath = 0;
+
+    public TextMeshProUGUI nameOfCurrentPin;
+
 
     private void Start()
     {
         stateManager = GetComponent<StateManager>();
+    }
+
+    public void nextPoint()
+    {
+        if (currentPointPath == hullPoints.Count-1)
+        {
+            return;
+        }
+        else
+        {
+            currentPointPath++;
+            nameOfCurrentPin.text = hullPoints[currentPointPath].GetComponent<Node>().uiName.text;
+        }
+    }
+    public void previous()
+    {
+        if(currentPointPath == 0)
+        {
+            return;
+        }
+        else
+        {
+            currentPointPath--;
+            nameOfCurrentPin.text = hullPoints[currentPointPath].GetComponent<Node>().uiName.text;
+        }
     }
     public void autoGrahanPath()
     {
@@ -57,8 +87,8 @@ public class autoPath : MonoBehaviour
 
         //Case of P0
 
-        Node startNode = hullPoints[0].GetComponent<Node>();
-        Node endNode = findFarthestPoint(hullPoints[0]).GetComponent<Node>();
+        Node startNode = hullPoints[currentPointPath].GetComponent<Node>();
+        Node endNode = findFarthestPoint(hullPoints[currentPointPath]).GetComponent<Node>();
 
         stateManager.autoPath(startNode, endNode);
 
