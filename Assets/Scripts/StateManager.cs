@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -83,17 +84,43 @@ public class StateManager : MonoBehaviour {
     }
     public void clearGraph()
     {
+        StartCoroutine(ClearForReal());
+      
+    }
+    void softClean()
+    {
         foreach (GameObject n in pinList)
         {
             n.GetComponent<Node>().turnRed();
+            n.GetComponent<Node>().nodeRadius.radius = 0.5f;
         }
+    }
+    IEnumerator ClearForReal()
+    {
+        yield return new WaitForSeconds(0.7f);
+        GameObject[] cleanables = GameObject.FindGameObjectsWithTag("connection");
+        for (var i = 0; i < cleanables.Length; i++)
+        {
+            Destroy(cleanables[i]);
+        }
+        cleanables = GameObject.FindGameObjectsWithTag("distanceInformer");
+        for (var i = 0; i < cleanables.Length; i++)
+        {
+            Destroy(cleanables[i]);
+        }
+        foreach (GameObject n in pinList)
+        {
+            n.GetComponent<Node>().nodeRadius.radius = 0.5f;
+            n.GetComponent<Node>().turnRed();
+        }
+
     }
     /// <summary>
     /// Connect all the nodes to create a graph
     /// </summary>
     public void createGraph()
     {
-        clearGraph();
+        softClean();
         graph.buildGraph(selectedPoints, pinList);
     }
     /// <summary>
@@ -108,6 +135,15 @@ public class StateManager : MonoBehaviour {
     }
     public void togglecalculatingShortestPath()
     {
-        calculatingShortestPath = !calculatingShortestPath;
+        if(calculatingShortestPath)
+        {
+            calculatingShortestPath = false;
+        }
+        else
+        {
+            calculatingShortestPath = true;
+        }
+
+        //calculatingShortestPath = !calculatingShortestPath;
     }
 }

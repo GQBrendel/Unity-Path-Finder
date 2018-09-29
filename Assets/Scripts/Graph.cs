@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,6 +11,10 @@ public class Graph : MonoBehaviour
     public List<Vector2> selectedPoints;
     public GameObject distanceInfoPrefab;
     public List<GameObject> distInfoList;
+
+    [HideInInspector]
+    public List<float> lowestDistance;
+    float distance = Mathf.Infinity;
 
     /// <summary>
     /// Get all the nodes and clear the refference from connected nodes.
@@ -29,20 +34,84 @@ public class Graph : MonoBehaviour
         pinList = _pinList.OrderBy(go => Mathf.Atan2(go.transform.position.x, go.transform.position.z)).ToList();
         clearInfo();
 
+
+        biggestLowestDistance();
         for (int i = 0; i < pinList.Count; i++)
         {
-            if (i != pinList.Count - 1 && i != pinList.Count - 2) //Ignoring the last two connections so we don't close the graph
+            pinList[i].GetComponentInChildren<nodeConnection>().triggerConnections(distance);
+        }
+        StartCoroutine(PerformConnections());
+
+        //
+   
+        //
+
+    }
+    IEnumerator PerformConnections()
+    {
+        yield return new WaitForSeconds(0.5f);
+        for (int i = 0; i < pinList.Count; i++)
+        {
+            List<GameObject> connectedList = pinList[i].GetComponentInChildren<nodeConnection>().nodesToConnect;
+
+            foreach (GameObject connectable in connectedList)
             {
-                //Connects a node with the next two nodes in the list,
-                //The result will be a full conected graph
-                Transform t1 = pinList[i].transform;
-                Transform t2 = pinList[i + 1].transform;
-                Transform t3 = pinList[i + 2].transform;
-                drawLaser(t1, t2);
-                drawLaserChild(t1, t3);
+                connectTwoNodes(pinList[i].transform, connectable.transform);
             }
+
+        }
+
+    }
+    private void connectTwoNodes(Transform start, Transform end)
+    {
+        LineRenderer laser;
+
+        GameObject lineHolder = start.gameObject.GetComponent<Node>().instantiateConnection();
+
+        laser = lineHolder.GetComponent<LineRenderer>();
+
+        laser.SetPosition(0, start.position);
+        laser.SetPosition(1, end.position);
+
+        start.GetComponent<Node>().connections.Add(end.GetComponent<Node>());
+        //end.GetComponent<Node>().connections.Add(start.GetComponent<Node>());
+
+        instantiateCounter(start, end);
+    }
+    public float getBiggestLowestDistance()
+    {
+        if(distance < Mathf.Infinity)
+        {
+            return distance;
+        }
+        else
+        {
+            return biggestLowestDistance();
         }
     }
+    float biggestLowestDistance()
+    {
+        for (int i = 0; i < pinList.Count; i++)
+        {
+            for (int j = 0; j < pinList.Count; j++)
+            {
+                float calculatedDistance = euclidianDistance((pinList[i].transform.position), (pinList[j].transform.position));
+                if (calculatedDistance < distance && (i != j))
+                {
+                    distance = calculatedDistance;
+                }
+            }
+            lowestDistance.Add(distance);
+            distance = Mathf.Infinity;
+        }
+        lowestDistance.Sort();
+      
+        Debug.Log("The biggest Lowest Distance is " + lowestDistance[lowestDistance.Count - 1]);
+
+        distance = lowestDistance[lowestDistance.Count - 1];
+        return distance;
+    }
+
     /// <summary>
     /// Gets the middle point beetween two nodes and instantiate a object to show the distance value 
     /// beetween they.
@@ -57,38 +126,9 @@ public class Graph : MonoBehaviour
         float dist = euclidianDistance(start.position, end.position);
         go.GetComponentInChildren<Text>().text = dist.ToString("f2");
     }
-    //Draw a line that connects two objects
-    private void drawLaser(Transform start, Transform end)
-    {
-        LineRenderer laser;
-        laser = start.GetComponent<LineRenderer>();
-        
-        laser.SetPosition(0, start.position);
-        laser.SetPosition(1, end.position);
-
-        start.GetComponent<Node>().connections.Add(end.GetComponent<Node>());
-        end.GetComponent<Node>().connections.Add(start.GetComponent<Node>());
-
-        instantiateCounter(start, end);
-    }
-    //Unity does not let a object have two line renderers, so will attach the second connection on the child object.
-    private void drawLaserChild(Transform start, Transform end)
-    {
-        LineRenderer laser;
-        laser = start.Find("Pin").GetComponent<LineRenderer>();
-
-        laser.SetPosition(0, start.position);
-        laser.SetPosition(1, end.position);
-        instantiateCounter(start, end);
-
-
-        start.GetComponent<Node>().connections.Add(end.GetComponent<Node>());
-        end.GetComponent<Node>().connections.Add(start.GetComponent<Node>());
-    }
     //Returns the euclidian distance beetween two points
     private float euclidianDistance(Vector3 p1, Vector3 p2)
     {
-
         float x0 = p1.x;
         float y0 = p1.z;
 

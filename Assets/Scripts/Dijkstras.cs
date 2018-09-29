@@ -25,38 +25,42 @@ public class Dijkstras : MonoBehaviour {
         // The final path
         Path path = new Path();
 
-        // If the start and end are same node, we can return the start node
+        // If the start and end are same node, we just return the start node, since the start and the end are the same
         if (start == end)
         {
             path.nodes.Add(start);
             return path;
         }
 
-        // The list of unvisited nodes
+        // Keep the unvisited nodes in a list
         List<Node> unvisited = new List<Node>();
 
-        // Previous nodes in optimal path from source
+        // Create a chain of nodes, always pointing to the previous
         Dictionary<Node, Node> previous = new Dictionary<Node, Node>();
 
         // The calculated distances, set all to Infinity at start, except the start Node
+        //Keeps tracks of all distances to show then later in the sum
         Dictionary<Node, float> distances = new Dictionary<Node, float>();
 
+
+        //Iterate on nodelist to add then to the unvisited list
         for (int i = 0; i < nodesList.Count; i++)
         {
+            //At the start all nodes are considered unvisited
             Node node = nodesList[i];
             unvisited.Add(node);
 
-            // Setting the node distance to Infinity
+            // And all the distances are set to Infinity
             distances.Add(node, float.MaxValue);
         }
 
         // Set the starting Node distance to zero
         distances[start] = 0f;
 
-        while (unvisited.Count != 0)
+        while (unvisited.Count != 0) //Let's iterate and "visit" all the nodes
         {
 
-            // Ordering the unvisited list by distance, smallest distance at start and largest at end
+            // Ordering the unvisited list by distance, smallest distance at start
             unvisited = unvisited.OrderBy(node => distances[node]).ToList();
 
             // Getting the Node with smallest distance

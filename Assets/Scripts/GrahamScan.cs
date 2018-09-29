@@ -19,9 +19,14 @@ public class GrahamScan : MonoBehaviour
 
     public int turn(Vector2 p, Vector2 q, Vector2 r)
     {
+        //The points that we take here are
+        // P => The current node
+        // Q => The proevious node
+        // R => The node before the previous node.
+        
         //If the result is 1 this means a turn to left, while -1 means turn to right.
-        int boll = ((q.x - p.x) * (r.y - p.y) - (r.x - p.x) * (q.y - p.y)).CompareTo(0);
-        return boll;
+        int result = ((q.x - p.x) * (r.y - p.y) - (r.x - p.x) * (q.y - p.y)).CompareTo(0);
+        return result;
     }
 
     /// <summary>
@@ -32,6 +37,8 @@ public class GrahamScan : MonoBehaviour
     /// <param name="r"></param>
     public void keepLeft(List<Vector2> hull, Vector2 r)
     {
+        //Here we cycle throught the points and keep removing points if the do not belong in the convex hull
+        //We do that cheking counter clockwise and removing if they are not part of the convex hull
         while (hull.Count > 1 && turn(hull[hull.Count - 2], hull[hull.Count - 1], r) != 1)
         {
              hull.RemoveAt(hull.Count - 1);
@@ -54,43 +61,51 @@ public class GrahamScan : MonoBehaviour
     /// </summary>
     public List<Vector2> MergeSort(Vector2 p0, List<Vector2> arrPoint)
     {
-        if (arrPoint.Count == 1)
+        if (arrPoint.Count == 1) //Synce the is recursive, we'll return when the size is 1
         {
             return arrPoint;
         }
-        List<Vector2> arrSortedInt = new List<Vector2>();
-        int middle = (int)arrPoint.Count / 2;
+        List<Vector2> arrSortedInt = new List<Vector2>(); //List to keep track of the sorted array
+        int middle = (int)arrPoint.Count / 2; //Simply the middle point
+
         //First divide the array in left and right to merge the two different sides
         List<Vector2> leftArray = arrPoint.GetRange(0, middle);
         List<Vector2> rightArray = arrPoint.GetRange(middle, arrPoint.Count - middle);
+
         leftArray = MergeSort(p0, leftArray);
         rightArray = MergeSort(p0, rightArray);
+
+        //Iterators for both sides
         int leftptr = 0;
         int rightptr = 0;
+
         //Iterate on both arrays and sort based on angle
         for (int i = 0; i < leftArray.Count + rightArray.Count; i++)
         {
-            if (leftptr == leftArray.Count)
+            if (leftptr == leftArray.Count) //If it's the last point on the left, just add to the list
             {
                 arrSortedInt.Add(rightArray[rightptr]);
                 rightptr++;
-            }
-            else if (rightptr == rightArray.Count)
+            } 
+            else if (rightptr == rightArray.Count) //Same for right
             {
                 arrSortedInt.Add(leftArray[leftptr]);
                 leftptr++;
             }
+            //If the smalest angle is on the left array, we'll add it to the list
             else if (getAngle(p0, leftArray[leftptr]) < getAngle(p0, rightArray[rightptr]))
             {
                 arrSortedInt.Add(leftArray[leftptr]);
                 leftptr++;
             }
+            //Otherwise we'll add the right node
             else
             {
                 arrSortedInt.Add(rightArray[rightptr]);
                 rightptr++;
             }
         }
+        //At the end we return the sorted array, with right and left together
         return arrSortedInt;
     }
     public void convexHull(List<Vector2> points)
@@ -106,13 +121,16 @@ public class GrahamScan : MonoBehaviour
                 if (p0.y > value.y)
                     p0 = value;
             }
-        }
-        List<Vector2> order = new List<Vector2>();
+        } //So now p0 is the vector with the smallest y
+
+        List<Vector2> order = new List<Vector2>(); //Create a list to be ordered
         foreach (Vector2 value in points)
         {
-            if (p0 != value)
+            if (p0 != value) //The list will have all the points, except the p0
                 order.Add(value);
         }
+
+        //So we apply merge sort passing the p0 and the list with all the other vectors
 
         order = MergeSort(p0, order);
         //Create a new list to save the result, the add the point zero and the two first from the ordered list;
@@ -123,6 +141,7 @@ public class GrahamScan : MonoBehaviour
         //Remove the points that are already in the result list
         order.RemoveAt(0);
         order.RemoveAt(0);
+
         foreach (Vector2 value in order)
         {
             //Remove the points that don't are part of convex hull

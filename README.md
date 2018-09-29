@@ -1,3 +1,14 @@
+#
+	Jogos Digitais - Unisinos 2018/02
+	Desenvolvido para a disciplina de Técnicas de Otimização.
+	Aluno: Guilherme Brendel
+	Professor Leandro Tonietto.
+	
+	Link para o Github: https://github.com/GQBrendel/Unity-Path-Finder.git	
+	Abaixo o Read do repositório.
+	Porto Alegre - 14/09/2018
+#
+
 # Unity-Path-Finder
 
 Implemmentation in Unity using Graham Scan Convex Hull and Dijkstras algorithm for path finder.
